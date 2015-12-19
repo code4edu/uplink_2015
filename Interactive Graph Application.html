@@ -2,7 +2,7 @@
     <head>
        
         <script type="text/javascript" src="jCanvaScript.js"> </script>
-		<script type="text/javascript" src="graph.js"> </script>
+		<script type="text/javascript" src="Queue.js"> </script>
       
         <script>
 		
@@ -36,12 +36,24 @@
 			function update(){
 				for(var i = 0; i < keys.length; i++){
 					keys[i].color(black)
+					keys[i].animate({radius: R})
 					}
 				for(var j = 0; j < labels.length; j++){
 					labels[j].up('top')
 				}
 			}
-			
+							var begin
+				var end
+				function getId(line){
+				for(var i = 0; i < keys.length; i++){
+				if(keys[i].isPointIn(line.points()[0][0], line.points()[0][1])){
+				begin = keys[i].id()
+				}
+				if(keys[i].isPointIn(line.points()[1][0], line.points()[1][1])){
+				end = keys[i].id()
+				}
+				}
+				}
 			document.onclick = function(event){
 				if(event.pageX >= 500 || event.pageY >= 500)
 					return
@@ -154,20 +166,62 @@
 							alert("Verticie was not selected")
 						}
 				}
+				var time = 1000
 				document.getElementById('11').onclick = function(){
+					if(tempcircle1 == null){
+						alert("Verticie was not selected")
+						return;
+						}
+					var queue = new Queue()
+					var used = []
+					tempcircle1.color('#ff0000')
+					for(var i = 0; i < keys.length; i++){
+						used.push(false)
+					}
+						used[tempcircle1.id()] = true
+						queue.enqueue(tempcircle1.id())
+					while(!queue.isEmpty()){
+						var to = queue.dequeue()
+						for(var i = 0; i < graph[to].length; i++){
+
+							getId(graph[to][i])
+							if(!used[begin]){
+								queue.enqueue(begin)
+								used[begin] = true
+								graph[to][i].color(labelcolor)
+								}
+								if(!used[end]){
+								queue.enqueue(end)
+								used[end] = true
+								graph[to][i].color(labelcolor)
+								}
+								keys[to].animate({color: '#ff0000', radius: R - 10}, time).up('top')
+								time += 500
+								labels[to].up('top')
+					}
+					}
 					
 				}
 				document.getElementById('12').onclick = function(){
 					
+				}
+				document.getElementById('13').onclick = function(){
+					update()
 				}
 				jc.start('canvas_1', true);
 			}
         </script>
     </head>
     <body onload="simpleExample()">
-        <canvas height="500" width="500" id="canvas_1" style="border:2px solid #000000;"></canvas>
+	<style>
+	HTML {
+   background: url(site-background.png); /* Путь к графическому файлу с первым фоном */ 
+  }
+	</style>
+        <canvas height="500" width="500" id="canvas_1" style=" background:  #C0C0C0;"></canvas>
 		<button id = "123"  style="position: absolute; left: 530;"> Delete a vertex</button>
 		<button id = "11" style="position: absolute; left: 530; top: 40; width: 105; height: 21" > BFS</button>
 		<button id = "12" style="position: absolute; left: 530; top: 70; width: 105; height: 21" > Check BFS</button>
+		<button id = "13" style="position: absolute; left: 530; top: 100; width: 105; height: 21" > Refresh</button>
     </body>
     </html>
