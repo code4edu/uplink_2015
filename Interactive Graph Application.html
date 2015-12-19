@@ -146,9 +146,10 @@
 							if(count1 > keys.length - 1){
 							alert("You win")
 							isBFS = false
-							keys[tempcircle1.id()].animate({color: black, radius: R}, 1000)
+							
 							tempcircle1 = null
 							update()
+							
 							return
 						}
 						}
@@ -248,6 +249,8 @@
 					var queue = new Queue()
 					var used = []
 					tempcircle1.color('#ff0000')
+					labels[tempcircle1.id()].up('top')
+					
 					for(var i = 0; i < keys.length; i++){
 						used.push(false)
 					}
@@ -256,7 +259,10 @@
 					while(!queue.isEmpty()){
 						var to = queue.dequeue()
 						for(var i = 0; i < graph[to].length; i++){
-
+							
+								keys[to].animate({color: '#ff0000', radius: R - 10}, time).up('top')
+								time += 500
+								labels[to].up('top')
 							getId(graph[to][i])
 							if(!used[begin]){
 								queue.enqueue(begin)
@@ -268,9 +274,8 @@
 								used[end] = true
 								graph[to][i].color(labelcolor)
 								}
-								keys[to].animate({color: '#ff0000', radius: R - 10}, time).up('top')
-								time += 500
-								labels[to].up('top')
+								
+								
 					}
 					}
 					
@@ -284,9 +289,11 @@
 					
 					
 					isBFS = true
+					
 					update()
 				}
 				document.getElementById('13').onclick = function(){
+					
 					update()
 					
 				}
