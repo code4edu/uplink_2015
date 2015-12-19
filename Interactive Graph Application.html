@@ -18,6 +18,8 @@
 			var counter = 0
 			var tempcircle1
 			var templabel
+			var count1 = 1
+			var isBFS = false
 			function addCircle(x, y){
 				var tempcircle = jc.circle(x, y, R, black, 1).id(counter)
 				keys.push(tempcircle)
@@ -54,9 +56,14 @@
 				}
 				}
 				}
+				
 			document.onclick = function(event){
+			
 				if(event.pageX >= 500 || event.pageY >= 500)
 					return
+					if(!isBFS){
+						
+					
 				if(!FirstClickCircle){
 					for(var i = 0; i < keys.length; i++){
 						if(keys[i].isPointIn(event.pageX + 10,event.pageY + 10, true) || keys[i].isPointIn(event.pageX - 10,event.pageY + 10, true) || keys[i].isPointIn(event.pageX + 10,event.pageY - 10, true) || keys[i].isPointIn(event.pageX - 10,event.pageY - 10, true)){
@@ -122,6 +129,38 @@
 							return
 						
 					}
+					}
+					else{
+					//alert("Enter BFS")
+					for(var i = 0; i < keys.length; i++){
+						if(keys[i].isPointIn(event.pageX + 10,event.pageY + 10, true) || keys[i].isPointIn(event.pageX - 10,event.pageY + 10, true) || keys[i].isPointIn(event.pageX + 10,event.pageY - 10, true) || keys[i].isPointIn(event.pageX - 10,event.pageY - 10, true)){
+							tempcircle1 = keys[i]
+							
+						}
+					}
+					
+						
+						if(states[tempcircle1.id()] == count1+1){
+							count1++
+							keys[tempcircle1.id()].animate({color: 'ff0000', radius: R - 10}, 1000)
+							if(count1 > keys.length - 1){
+							alert("You win")
+							isBFS = false
+							keys[tempcircle1.id()].animate({color: black, radius: R}, 1000)
+							tempcircle1 = null
+							update()
+							return
+						}
+						}
+						
+						else{
+							alert("You failed")
+							isBFS = false
+							tempcircle1 = null
+							update()
+							
+						}
+					}
 				}
 				document.getElementById('123').onclick = function(){
 				
@@ -167,6 +206,40 @@
 						}
 				}
 				var time = 1000
+				var count = 0
+				var states = []
+				function BFS(vertecie){
+						var queue = new Queue()
+						var used = []
+						states = []
+						for(var i = 0; i < keys.length; i++){
+							used.push(false)
+							states.push(-1)
+						}
+							used[vertecie] = true
+							states[vertecie] = count
+							queue.enqueue(vertecie)
+						while(!queue.isEmpty()){
+							var to = queue.dequeue()
+							count++
+							states[to] = count
+							for(var i = 0; i < graph[to].length; i++){
+
+								getId(graph[to][i])
+								if(!used[begin]){
+									queue.enqueue(begin)
+									used[begin] = true
+									
+									}
+									if(!used[end]){
+									queue.enqueue(end)
+									used[end] = true
+									
+									}
+									
+						}
+						}
+				}
 				document.getElementById('11').onclick = function(){
 					if(tempcircle1 == null){
 						alert("Verticie was not selected")
@@ -203,10 +276,19 @@
 					
 				}
 				document.getElementById('12').onclick = function(){
+				var valuekey = Math.floor(Math.random() * keys.length)
+					keys[valuekey].animate({color: '#ff0000', radius: R - 10}, time).up('top')
+					labels[valuekey].up('top')
+					count = 0
+					BFS(valuekey);
 					
+					
+					isBFS = true
+					update()
 				}
 				document.getElementById('13').onclick = function(){
 					update()
+					
 				}
 				jc.start('canvas_1', true);
 			}
