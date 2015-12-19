@@ -141,6 +141,7 @@
 								}
 								keys[tempcircle1.id()].del()
 								
+								
 								graph.splice(tempcircle1.id(),1)
 								keys.splice(tempcircle1.id(), 1)
 								labels[tempcircle1.id()].del()
@@ -153,6 +154,12 @@
 							alert("Verticie was not selected")
 						}
 				}
+				document.getElementById('11').onclick = function(){
+					
+				}
+				document.getElementById('12').onclick = function(){
+					
+				}
 				jc.start('canvas_1', true);
 			}
         </script>
@@ -160,6 +167,7 @@
     <body onload="simpleExample()">
         <canvas height="500" width="500" id="canvas_1" style="border:2px solid #000000;"></canvas>
 		<button id = "123"  style="position: absolute; left: 530;"> Delete a vertex</button>
-		<button  style="position: absolute; left: 530; top: 40; width: 105; height: 21" > BFS</button>
+		<button id = "11" style="position: absolute; left: 530; top: 40; width: 105; height: 21" > BFS</button>
+		<button id = "12" style="position: absolute; left: 530; top: 70; width: 105; height: 21" > Check BFS</button>
     </body>
     </html>
