@@ -23,14 +23,14 @@
 				keys.push(tempcircle)
 				var labeltemp = jc.text(counter,tempcircle.position().x - 6,tempcircle.position().y + 6).font('20px Times New Roman').color(labelcolor)
 				labels.push(labeltemp)
-				graph[tempcircle] = []
+				graph[tempcircle.id()] = []
 				counter++
 				update()
 			}
             function addLine(circle1, circle2){
 				var linetemp = jc.line([[circle1.position().x, circle1.position().y], [circle2.position().x,circle2.position().y]])
-				graph[circle1].push(linetemp)
-				graph[circle2].push(linetemp)
+				graph[circle1.id()].push(linetemp)
+				graph[circle2.id()].push(linetemp)
 				update()
 			}
 			function update(){
@@ -77,18 +77,34 @@
 								return
 							for(var d = 0; d < keys.length; d++){
 								if(tempcircle1 == keys[d]){
-								//alert("asdasdasdasdasdasd")
+								for(var k = 0;k < graph[tempcircle1.id()].length; k++){
+									var temp = graph[tempcircle1.id()][k].points()
+									if(keys[d].isPointIn(temp[0][0], temp[0][1], true))
+									{
+										
+										temp[0][0] = event.pageX
+										temp[0][1] = event.pageY
+									}
+									else{
+										
+											temp[1][0] = event.pageX
+											temp[1][1] = event.pageY
+								}
+											
+											
+									
+									graph[tempcircle1.id()][k].points(temp)
+									
+								}
+								
 								keys[d].animate({x:event.pageX,y:event.pageY})
+							
 								labels[d].animate({x:event.pageX - 6,y:event.pageY + 6})
+								
 								
 								}
 							}	
-							for(var k = 0;k < graph[tempcircle1].length; k++){
-									var temp = graph[tempcircle1][k].points()
-									temp[1][0] = event.pageX
-									temp[1][1] = event.pageY
-									graph[tempcircle1][k].points(temp)
-							}
+							
 							tempcircle1 = null
 							update()
 							return
