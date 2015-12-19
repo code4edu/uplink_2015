@@ -1,0 +1,90 @@
+<html>
+    <head>
+       
+        <script type="text/javascript" src="jCanvaScript.js"> </script>
+		<script type="text/javascript" src="graph.js"> </script>
+      
+        <script>
+		
+        function simpleExample(){
+			var FirstClickCircle = false
+			var R = 20 
+			var graph = []
+			var keys = []
+			var labels = []
+			var blue = '#0000FF'
+			var black = 'rgb(0,0,0)'
+			var labelcolor = '#FFFF00'
+			var counter = 0
+			var tempcircle1
+			var templabel1
+			var temp
+			function addCircle(x, y){
+				var tempcircle = jc.circle(x, y, R, blue, 1).id(counter)
+				keys.push(tempcircle)
+				var labeltemp = jc.text(tempcircle.id(),tempcircle.position().x - 6,tempcircle.position().y + 6).font('20px Times New Roman').color(labelcolor)
+				labels.push(labeltemp)
+				graph[tempcircle] = []
+				counter++
+				update()
+			}
+            function addLine(circle1, circle2){
+				var linetemp = jc.line([[circle1.position().x, circle1.position().y], [circle2.position().x,circle2.position().y]])
+				graph[circle1].push(linetemp)
+				graph[circle2].push(linetemp)
+				update()
+			}
+			function update(){
+				for(var i = 0; i < keys.length; i++){
+					keys[i].color(blue).up('top')
+					}
+				for(var i = 0; i < labels.length; i++){
+					labels[i].up('top')
+				}
+			}
+			document.onclick = function(event){
+				
+				if(!FirstClickCircle){
+					for(var i = 0; i < keys.length; i++){
+						if(keys[i].isPointIn(event.pageX,event.pageY, true)){
+							keys[i].color(black)
+							templabel1 = labels[i]
+							tempcircle1 = keys[i]
+							temp = i
+							FirstClickCircle = true
+							return
+						}
+					}
+					addCircle(event.pageX, event.pageY)
+					FirstClickCircle = false
+				}
+				else{
+					alert('else')
+					FirstClickCircle = false
+					for(var i = 0; i < keys.length; i++){
+						if(keys[i].isPointIn(event.pageX,event.pageY, true)){
+							if(keys[i] != tempcircle1){
+								alert('add line')
+								addLine(tempcircle1, keys[i])
+								tempcircle1 = null
+								return
+							}
+						else{
+							alert('not line')
+							tempcircle1 = null
+							update()
+							return
+						}
+							
+						}
+					}
+				}
+				}
+				jc.start('canvas_1', true);
+			}
+        </script>
+    <head>
+    <body onload="simpleExample()">
+        <canvas height="500" width="500" id="canvas_1" style="border:2px solid #000000;"></canvas>
+    </body>
+    </html>
