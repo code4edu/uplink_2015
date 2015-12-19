@@ -17,6 +17,7 @@
 			var labelcolor = '#FFFF00'
 			var counter = 0
 			var tempcircle1
+			var templabel
 			function addCircle(x, y){
 				var tempcircle = jc.circle(x, y, R, black, 1).id(counter)
 				keys.push(tempcircle)
@@ -40,13 +41,14 @@
 					labels[j].up('top')
 				}
 			}
+			
 			document.onclick = function(event){
 				
 				if(!FirstClickCircle){
 					for(var i = 0; i < keys.length; i++){
 						if(keys[i].isPointIn(event.pageX,event.pageY, true)){
 							keys[i].color(blue).up('top')
-							alert(i)
+							templabel = labels[i]
 							tempcircle1 = keys[i]
 							FirstClickCircle = true
 							return
@@ -58,24 +60,42 @@
 				else{
 					
 					FirstClickCircle = false
-					for(var i = 0; i < keys.length; i++){
-						if(keys[i].isPointIn(event.pageX,event.pageY, true)){
-							if(keys[i] != tempcircle1 && tempcircle1 != null){
-								
-								addLine(tempcircle1, keys[i])
+					for(var j = 0; j < keys.length; j++){
+						
+						if(keys[j].isPointIn(event.pageX,event.pageY, true)){
+						//alert(keys[j] != tempcircle1)
+							if(keys[j] != tempcircle1){
+								//alert("asdasd")
+								addLine(tempcircle1, keys[j])
+								tempcircle1 = null
 								return
 							}
-						else{
-							//alert(i)
+						}
+					}
+						
+							if(tempcircle1 == null)
+								return
+							for(var d = 0; d < keys.length; d++){
+								if(tempcircle1 == keys[d]){
+								//alert("asdasdasdasdasdasd")
+								keys[d].animate({x:event.pageX,y:event.pageY})
+								labels[d].animate({x:event.pageX - 6,y:event.pageY + 6})
+								
+								}
+							}	
+							for(var k = 0;k < graph[tempcircle1].length; k++){
+									var temp = graph[tempcircle1][k].points()
+									temp[1][0] = event.pageX
+									temp[1][1] = event.pageY
+									graph[tempcircle1][k].points(temp)
+							}
 							tempcircle1 = null
 							update()
 							return
-						}
-							
-						}
+						
 					}
 				}
-				}
+				
 				jc.start('canvas_1', true);
 			}
         </script>
