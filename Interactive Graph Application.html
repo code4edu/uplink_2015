@@ -59,18 +59,18 @@
 					FirstClickCircle = false
 				}
 				else{
-					alert('else')
+					
 					FirstClickCircle = false
 					for(var i = 0; i < keys.length; i++){
 						if(keys[i].isPointIn(event.pageX,event.pageY, true)){
 							if(keys[i] != tempcircle1){
-								alert('add line')
+								
 								addLine(tempcircle1, keys[i])
 								tempcircle1 = null
 								return
 							}
 						else{
-							alert('not line')
+							
 							tempcircle1 = null
 							update()
 							return
