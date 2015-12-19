@@ -17,12 +17,10 @@
 			var labelcolor = '#FFFF00'
 			var counter = 0
 			var tempcircle1
-			var templabel1
-			var temp
 			function addCircle(x, y){
-				var tempcircle = jc.circle(x, y, R, blue, 1).id(counter)
+				var tempcircle = jc.circle(x, y, R, black, 1).id(counter)
 				keys.push(tempcircle)
-				var labeltemp = jc.text(tempcircle.id(),tempcircle.position().x - 6,tempcircle.position().y + 6).font('20px Times New Roman').color(labelcolor)
+				var labeltemp = jc.text(counter,tempcircle.position().x - 6,tempcircle.position().y + 6).font('20px Times New Roman').color(labelcolor)
 				labels.push(labeltemp)
 				graph[tempcircle] = []
 				counter++
@@ -36,10 +34,10 @@
 			}
 			function update(){
 				for(var i = 0; i < keys.length; i++){
-					keys[i].color(blue).up('top')
+					keys[i].color(black)
 					}
-				for(var i = 0; i < labels.length; i++){
-					labels[i].up('top')
+				for(var j = 0; j < labels.length; j++){
+					labels[j].up('top')
 				}
 			}
 			document.onclick = function(event){
@@ -47,10 +45,9 @@
 				if(!FirstClickCircle){
 					for(var i = 0; i < keys.length; i++){
 						if(keys[i].isPointIn(event.pageX,event.pageY, true)){
-							keys[i].color(black)
-							templabel1 = labels[i]
+							keys[i].color(blue).up('top')
+							alert(i)
 							tempcircle1 = keys[i]
-							temp = i
 							FirstClickCircle = true
 							return
 						}
@@ -63,14 +60,13 @@
 					FirstClickCircle = false
 					for(var i = 0; i < keys.length; i++){
 						if(keys[i].isPointIn(event.pageX,event.pageY, true)){
-							if(keys[i] != tempcircle1){
+							if(keys[i] != tempcircle1 && tempcircle1 != null){
 								
 								addLine(tempcircle1, keys[i])
-								tempcircle1 = null
 								return
 							}
 						else{
-							
+							//alert(i)
 							tempcircle1 = null
 							update()
 							return
