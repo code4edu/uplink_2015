@@ -43,10 +43,11 @@
 			}
 			
 			document.onclick = function(event){
-				
+				if(event.pageX >= 500 || event.pageY >= 500)
+					return
 				if(!FirstClickCircle){
 					for(var i = 0; i < keys.length; i++){
-						if(keys[i].isPointIn(event.pageX,event.pageY, true)){
+						if(keys[i].isPointIn(event.pageX + 10,event.pageY + 10, true) || keys[i].isPointIn(event.pageX - 10,event.pageY + 10, true) || keys[i].isPointIn(event.pageX + 10,event.pageY - 10, true) || keys[i].isPointIn(event.pageX - 10,event.pageY - 10, true)){
 							keys[i].color(blue).up('top')
 							templabel = labels[i]
 							tempcircle1 = keys[i]
@@ -61,7 +62,6 @@
 					
 					FirstClickCircle = false
 					for(var j = 0; j < keys.length; j++){
-						
 						if(keys[j].isPointIn(event.pageX,event.pageY, true)){
 						//alert(keys[j] != tempcircle1)
 							if(keys[j] != tempcircle1){
@@ -111,12 +111,55 @@
 						
 					}
 				}
+				document.getElementById('123').onclick = function(){
 				
+					if(tempcircle1 != null){
+								for(var k = 0;k < graph[tempcircle1.id()].length; k++){
+									var temp = graph[tempcircle1.id()][k].points()
+									var templine =graph[tempcircle1.id()][k]
+									if(tempcircle1.isPointIn(temp[0][0], temp[0][1], true) || tempcircle1.isPointIn(temp[1][0], temp[1][1], true))
+									{
+										graph[tempcircle1.id()][k].del()
+										graph[tempcircle1.id()].splice(k, 1)
+										for(var d = 0; d < keys.length; d++){
+											if(keys[d].isPointIn(temp[0][0], temp[0][1], true) || keys[d].isPointIn(temp[1][0], temp[1][1], true)){
+												for(var s = 0; s < graph[keys[d].id()].length;s++){
+													if(graph[keys[d].id()][s]== templine){
+														graph[tempcircle1.id()][s].del()
+														graph[tempcircle1.id()].splice(s, 1)
+													}
+												}
+											}
+										}
+									}
+									
+											
+											
+									
+									
+									
+								}
+								keys[tempcircle1.id()].del()
+								
+								graph.splice(tempcircle1.id(),1)
+								keys.splice(tempcircle1.id(), 1)
+								labels[tempcircle1.id()].del()
+								tempcircle1 = null
+								
+								jc.start('canvas_1', true);
+							
+						}
+						else{
+							alert("Verticie was not selected")
+						}
+				}
 				jc.start('canvas_1', true);
 			}
         </script>
-    <head>
+    </head>
     <body onload="simpleExample()">
         <canvas height="500" width="500" id="canvas_1" style="border:2px solid #000000;"></canvas>
+		<button id = "123"  style="position: absolute; left: 530;"> Delete a vertex</button>
+		<button  style="position: absolute; left: 530; top: 40; width: 105; height: 21" > BFS</button>
     </body>
     </html>
